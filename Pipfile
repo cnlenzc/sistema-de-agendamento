@@ -1,0 +1,27 @@
+[requires]
+
+python_version = "3.6"
+
+
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+django = "*"
+"psycopg2" = "*"
+prettyconf = "*"
+whitenoise = "*"
+dj-database-url = "*"
+djangorestframework = "*"
+coreapi = "*"
+gunicorn = "*"
+python-dotenv = "*"
+
+
+[dev-packages]
+
