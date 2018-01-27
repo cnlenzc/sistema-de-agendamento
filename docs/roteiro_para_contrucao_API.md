@@ -93,14 +93,29 @@ Arquivo app_age/models.py
 ```
 from django.db import models
 
-enum_sexo = (('M', 'Masculino'), ('F', 'Feminino'), ('O', 'Outro'))
+class Agendamento(models.Model):
+    data = models.DateField(
+        help_text='Data do agendamento da consulta/exame')
+    hora_inicial = models.TimeField(
+        help_text='Hora do início')
+    hora_final = models.TimeField(
+        help_text='Hora do final')
+    paciente = models.CharField(
+        help_text='Nome do Paciente',
+        max_length=40)
+    procedimento = models.TextField(
+        help_text='Descrição da consulta, exame ou cirurgia',
+        default='consulta')
 
-class Pythonista(models.Model):
-    nome = models.CharField(max_length=50, null=False)
-    email = models.EmailField(null=False)
-    telefone = models.CharField(max_length=15, null=True)
-    sexo = models.CharField(choices=enum_sexo, max_length=1, null=True)
-    site = models.URLField(null=True)
+    class Meta:
+        indexes = [
+            models.Index(fields=['data', 'hora_inicial'], name='data_hora_inicial_idx'),
+            models.Index(fields=['data', 'hora_final'], name='data_hora_final_idx'),
+            models.Index(fields=['paciente'], name='paciente_idx'),
+        ]
+        unique_together = ('data', 'hora_inicial')
+        ordering = ('data', 'hora_inicial')
+
 ```
 
 
@@ -115,11 +130,11 @@ python manage.py migrate
 python manage.py sqlmigrate app_age 0001
 ```
 
-#### Criando o primeiro app_age
+#### Criando o primeiro Agendamento
 ```
 python manage.py shell
-from app_age.models import Pythonista
-c = Pythonista(nome='Pedro', email='pedro@g.com')
+from app_age.models import Agendamento
+c = Agendamento(data=  '2017-01-30', hora_inicial='17:00', hora_final='17:15', paciente='Felipe')
 c.save()
 ```
 
@@ -128,75 +143,128 @@ c.save()
 python manage.py dbshell
 .table
 .schema app_age_app_age
-select * from app_age_app_age;
+select * from app_age_app_age; 
 .header on
 .mode column
 .exit
 ```
 
+#### Shell SQL do Postegres (psql)
+```
+python manage.py dbshell
+\dt
+select * from app_age_agendamento; 
+\q
+```
+
 #### Configuração da Rota URL
 Arquivo app_age/urls.py
 ```
-from django.conf.urls import url
+from django.conf.urls import url, include
 from app_age import views
+from rest_framework.routers import DefaultRouter
 
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'agendamento', views.AgendamentoViewSet)
+
+# The API URLs are now determined automatically by the router.
 urlpatterns = [
-    url(r'^$', views.index),
-    url(r'^app_age/$', views.PythonistaList.as_view()),
-    url(r'^app_age/(?P<pk>[0-9]+)/$', views.PythonistaDetail.as_view()),
+    url(r'^$', views.index, name='index'),
+    url(r'^', include(router.urls)),
 ]
 ```
-
 
 #### Criação da view
 Arquivo app_age/views.py
 ```
+from rest_framework import viewsets, permissions
+from app_age.models import Agendamento
+from app_age.serializers import AgendamentoSerializer
 from django.http import HttpResponse
-from rest_framework import generics
-from app_age.models import Pythonista
-from app_age.serializers import PythonistaSerializer
 
 def index(request):
-    return HttpResponse("Olá Pytonistas! Bem vindo ao Grupy!")
+    return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
 
-class PythonistaList(generics.ListCreateAPIView):
-    '''
-    Este método realiza 2 operações de acordo com o método Http:
-    GET - consulta lista de app_ages
-    POST - inclui um novo app_age
-    '''
-    queryset = Pythonista.objects.all()
-    serializer_class = PythonistaSerializer
-
-class PythonistaDetail(generics.RetrieveUpdateDestroyAPIView):
-    '''
-    Este método realiza 3 operações de acordo com o método Http:
-    GET - consulta app_age
-    PUT - altera dados do app_age
-    DELETE - remove app_age
-    '''
-    queryset = Pythonista.objects.all()
-    serializer_class = PythonistaSerializer
+class AgendamentoViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+    """
+    queryset = Agendamento.objects.all()
+    serializer_class = AgendamentoSerializer
+    permission_classes = (permissions.AllowAny,)
 ```
-
 
 #### Criação do serializer
 Arquivo app_age/serializers.py
 ```
 from rest_framework import serializers
-from app_age.models import Pythonista
+from app_age.models import Agendamento
 
-class PythonistaSerializer(serializers.ModelSerializer):
+class AgendamentoSerializer(serializers.ModelSerializer):
    class Meta:
-        model = Pythonista
+        model = Agendamento
         fields = ('__all__')
 ```
 
+
+## Deployment by heroku
+How to deploy this on a live system
+```
+$ git add .
+$ git commit -m "Added a file"
+$ heroku login
+    Enter your Heroku credentials…
+$ heroku create
+    Creating app... done, ⬢ nameless-fortress-70834
+    https://nameless-fortress-70834.herokuapp.com/ | https://git.heroku.com/nameless-fortress-70834.git
+$ git push heroku master
+    -----> Python app detected
+    -----> Launching... done, v7
+```
+
+## Comandos do heroku
+To run your application locally
+```
+$ heroku local web
+```
+
+To view your application remote
+```
+$ heroku open
+```
+
+View logs
+```
+$ heroku logs --tail
+```
+
+View info running
+```
+$ heroku ps
+```
+Processing static files
+```
+$ python manage.py collectstatic
+```
+
+shell remote
+```
+$ heroku run bash
+$ heroku run python
+$ heroku run python manage.py shell
+$ heroku run python manage.py migrate
+$ heroku run python proj_age/manage.py migrate
+```
+
+
 #### Chamando a API pela linha de comando
 ```
-curl localhost:8000/app_age/
-curl -i localhost:8000/app_age/
-http get localhost:8000/app_age/
+curl https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/
+curl -i https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/
+http get https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/
+http get https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/1/
 ```
 
 #### Chamando a API em outro programa python

@@ -1,6 +1,6 @@
 [requires]
 
-python_version = "3.6"
+python_full_version = "3.6.4"
 
 
 [[source]]
@@ -20,8 +20,8 @@ dj-database-url = "*"
 djangorestframework = "*"
 coreapi = "*"
 gunicorn = "*"
-python-dotenv = "*"
 
 
 [dev-packages]
 
+python-dotenv = "*"

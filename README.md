@@ -90,7 +90,7 @@ Explain what these tests test and why
 Not yet implemented
 ```
 
-## Deployment
+## Deployment by heroku
 
 How to deploy this on a live system
 ```
@@ -99,8 +99,8 @@ $ git commit -m "Added a file"
 $ heroku login
     Enter your Heroku credentials…
 $ heroku create
-    Creating app... done, ⬢ floating-forest-86256
-    https://floating-forest-86256.herokuapp.com/ | https://git.heroku.com/floating-forest-86256.git
+    Creating app... done, ⬢ nameless-fortress-70834
+    https://nameless-fortress-70834.herokuapp.com/ | https://git.heroku.com/nameless-fortress-70834.git
 $ git push heroku master
     -----> Python app detected
     -----> Launching... done, v7
