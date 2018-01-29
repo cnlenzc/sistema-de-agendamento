@@ -256,6 +256,9 @@ $ heroku run python
 $ heroku run python manage.py shell
 $ heroku run python manage.py migrate
 $ heroku run python proj_age/manage.py migrate
+$ heroku config:set DEBUG=False
+$ heroku config:set SECRET_KEY=')z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*'
+
 ```
 
 

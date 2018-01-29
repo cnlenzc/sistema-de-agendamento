@@ -39,18 +39,15 @@ $ export DATABASE_URL='postgres://{{username}}:{{password}}@localhost:port/{{dat
 ```
 Example of sistema-deagendamento/.env file:
 ```
+DEBUG=True
 WEB_CONCURRENCY=2
 DATABASE_URL='postgresql://u_age:pwd123@localhost:5432/db_age'
+SECRET_KEY=")z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*"
 ```
 
 Create the database objects
 ```
 $ python manage.py migrate
-```
-
-Import data from test
-```
-$ python manage.py import ...
 ```
 
 ## Running the automatic tests
@@ -63,9 +60,9 @@ Result
 ```
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
-........................
+...........
 ----------------------------------------------------------------------
-Ran 24 tests in 0.972s
+Ran 11 tests in 0.117s
 
 OK
 Destroying test database for alias 'default'...
@@ -80,6 +77,9 @@ https://sistema-de-agendamento-lenz.herokuapp.com/docs
 
 ###### Hello World page
 https://sistema-de-agendamento-lenz.herokuapp.com
+
+###### Lista Agendamentos
+https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/
 
 
 ### Coding style tests
@@ -127,8 +127,6 @@ Not yet implemented
 ## Authors
 
 * **Carlos Neves Lenz Cesar** - *Initial work*
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
