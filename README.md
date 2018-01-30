@@ -94,16 +94,19 @@ Not yet implemented
 
 How to deploy this on a live system
 ```
-$ git add .
-$ git commit -m "Added a file"
-$ heroku login
-    Enter your Heroku credentials…
-$ heroku create
-    Creating app... done, ⬢ nameless-fortress-70834
-    https://nameless-fortress-70834.herokuapp.com/ | https://git.heroku.com/nameless-fortress-70834.git
-$ git push heroku master
-    -----> Python app detected
-    -----> Launching... done, v7
+    $ git add .
+    $ git commit -m "Added a file"
+    $ heroku login
+        Enter your Heroku credentials…
+    $ heroku create
+        Creating app... done, ⬢ nameless-fortress-70834
+        https://nameless-fortress-70834.herokuapp.com/ | https://git.heroku.com/nameless-fortress-70834.git
+    $ git push heroku master
+        -----> Python app detected
+        -----> Launching... done, v7
+    $ heroku run python proj_age/manage.py migrate
+    $ heroku config:set DEBUG=False
+    $ heroku config:set SECRET_KEY=')z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*'
 ```
 
 ## Built With
@@ -116,7 +119,7 @@ $ git push heroku master
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
@@ -130,7 +133,7 @@ Not yet implemented
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Not yet implemented
 
 ## Acknowledgments
 

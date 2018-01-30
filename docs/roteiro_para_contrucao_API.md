@@ -25,10 +25,16 @@ python manage.py startapp app_age
 
 #### Testar o servidor Http
 ```
-python manage.py runserver
+$ python manage.py runserver
+  para usar o server: WSGIServer/0.2 CPython/3.6.4
+    ou 
+$ heroku local
+  para usar o server: gunicorn/19.7.1
 ```
 Abra o browser com url
-http://localhost:8000/
+http://localhost:8000/ (WSGIServer)
+ ou
+http://localhost:5000/ (gunicorn)
 
 
 #### Adicione o app na lista de apps instalados
@@ -163,6 +169,7 @@ Arquivo app_age/urls.py
 from django.conf.urls import url, include
 from app_age import views
 from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -171,6 +178,7 @@ router.register(r'agendamento', views.AgendamentoViewSet)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^docs/', include_docs_urls(title='API REST para o sistema de agendamento')),
     url(r'^', include(router.urls)),
 ]
 ```
@@ -178,18 +186,29 @@ urlpatterns = [
 #### Criação da view
 Arquivo app_age/views.py
 ```
-from rest_framework import viewsets, permissions
-from app_age.models import Agendamento
-from app_age.serializers import AgendamentoSerializer
-from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
-
 class AgendamentoViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
+
+    list:
+    Retorna a lista de agendamentos.
+
+    create:
+    Cria um novo agendamento.
+    
+    retrieve:
+    Consulta um agendamento específico.
+
+    update:
+    Altera todas as informações de um agendamento.
+    
+    partial_update:
+    Altera um campo de um agendamento.
+    
+    destroy:
+    Remove um agendamento.
+    
     """
     queryset = Agendamento.objects.all()
     serializer_class = AgendamentoSerializer
@@ -208,6 +227,55 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 ```
 
+#### Criação do arquivo de variáveis ambiente
+Arquivo proj_age/.env
+```
+DEBUG=True
+WEB_CONCURRENCY=2
+DATABASE_URL='postgresql://u_age:pwd123@localhost:5432/db_age'
+SECRET_KEY=")z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*"
+```
+
+#### Alteração do arquivo de configuração
+Arquivo prog_age/proj_age/setting.py
+```
+import dj_database_url
+
+# read the .env file and set the environment variables
+if os.environ.get('DEBUG') is None:
+    print('Loading .env File')
+    import dotenv
+    DOTENV_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env')
+    if os.path.isfile(DOTENV_FILE):
+        dotenv.load_dotenv(DOTENV_FILE)
+    else:
+        raise OSError('File .env does not exists. Rename the file .env_dev to .env')
+
+...
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get('DEBUG')
+
+...
+
+# Database
+# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
+DATABASES = {'default': {}}
+# Database with DATABASE_URL
+# Change 'default' database configuration with $DATABASE_URL.
+# https://pypi.org/project/dj-database-url/heroku config
+DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
+
+```
+
+#### Criação do arquivo de start do heroku
+Arquivo prog_age/Procfile.py
+```
+web: gunicorn --chdir ./proj_age proj_age.wsgi
+```
 
 ## Deployment by heroku
 How to deploy this on a live system
@@ -222,6 +290,9 @@ $ heroku create
 $ git push heroku master
     -----> Python app detected
     -----> Launching... done, v7
+$ heroku run python proj_age/manage.py migrate
+$ heroku config:set DEBUG=False
+$ heroku config:set SECRET_KEY=')z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*'
 ```
 
 ## Comandos do heroku
@@ -256,8 +327,6 @@ $ heroku run python
 $ heroku run python manage.py shell
 $ heroku run python manage.py migrate
 $ heroku run python proj_age/manage.py migrate
-$ heroku config:set DEBUG=False
-$ heroku config:set SECRET_KEY=')z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*'
 
 ```
 
