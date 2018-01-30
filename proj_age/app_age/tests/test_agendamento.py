@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from app_age.tests.data_agendamento import reg1, reg2, reg_invalid_date, reg_not_unique, reg_blank, reg_list
+from app_age.tests.data_agendamento import reg1, reg2, reg_invalid_date, reg_not_unique, reg_blank, reg_list,\
+    reg_hora_inicial_maior_hora_final
 
 class AgendamentoAPI(APITestCase):
 
@@ -38,6 +39,13 @@ class AgendamentoAPI(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, reg_blank['out'])
+
+
+    def test_create_hora_inicial_maior_hora_final(self):
+        response = self.client.post('/agendamento/', data=reg_hora_inicial_maior_hora_final['in'])
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, reg_hora_inicial_maior_hora_final['out'])
 
 
     def test_list_ok(self):

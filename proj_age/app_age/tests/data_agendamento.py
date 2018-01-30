@@ -103,6 +103,24 @@ reg_blank = \
 }
 
 
+reg_hora_inicial_maior_hora_final = \
+{
+    "in":
+    {
+        "data": "2019-03-30",
+        "hora_inicial": "10:20",
+        "hora_final": "10:00",
+        "paciente": "Airton",
+    },
+    "out":
+    {
+        "non_field_errors": [
+            "O horário final da consulta deve ser depois do inicial"
+        ]
+    },
+}
+
+
 reg_list = \
 {
     "out":
