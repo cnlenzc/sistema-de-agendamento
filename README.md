@@ -29,13 +29,20 @@ $ git clone https://github.com/cnlenzc/sistema-de-agendamento.git
 Create a Python virtualenv and install dependencies from Pipfile
 ```
 $ cd sistema-de-agendamento
-$ pipenv install
+$ pipenv install --dev
 $ pipenv shell
+```
+
+Create the database on Postgres
+```
+database name: db_age
+user: u_age
+password: pwd123
 ```
 
 Set environment variables by create .env file
 ```
-$ export DATABASE_URL='postgres://{{username}}:{{password}}@localhost:port/{{database}}'
+cp .env_dev .env
 ```
 Example of sistema-deagendamento/.env file:
 ```
@@ -58,18 +65,32 @@ $ python manage.py test
 ```
 Result
 ```
+Loading .env File
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
-...........
+.............
 ----------------------------------------------------------------------
-Ran 11 tests in 0.117s
+Ran 13 tests in 0.159s
 
 OK
 Destroying test database for alias 'default'...
 ```
 
-## Using the API
+## Running on local web server
+```
+$ python manage.py runserver
+  para usar o server: WSGIServer/0.2 CPython/3.6.4
+    ou 
+$ heroku local
+  para usar o server: gunicorn/19.7.1
+```
+Abra o browser com url
+http://localhost:8000/agendamento/ (WSGIServer)
+ ou
+http://localhost:5000/agendamento/ (gunicorn)
 
+
+## Using the API
 You can use the API by internet with these URL
 
 ###### API Documentation
