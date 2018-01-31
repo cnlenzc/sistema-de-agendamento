@@ -2,9 +2,26 @@ from rest_framework import viewsets, permissions
 from app_age.models import Agendamento
 from app_age.serializers import AgendamentoSerializer
 from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, DateFilter
+# from django_filters import rest_framework as filters
+
 
 def index(request):
     return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
+
+
+class AgendamentoFilter(FilterSet):
+    min_data = DateFilter(name="data", lookup_expr='gte')
+    max_data = DateFilter(name="data", lookup_expr='lte')
+
+    class Meta:
+        model = Agendamento
+        fields = ['data', 'paciente']
+        # fields = {
+        #     'data': ['lte', 'gte'],
+        #     'release_date': ['exact', 'year__gt'],
+        # }
+
 
 class AgendamentoViewSet(viewsets.ModelViewSet):
     """
@@ -33,3 +50,5 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
     queryset = Agendamento.objects.all()
     serializer_class = AgendamentoSerializer
     permission_classes = (permissions.AllowAny,)
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = AgendamentoFilter

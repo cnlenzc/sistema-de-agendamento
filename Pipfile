@@ -20,6 +20,7 @@ dj-database-url = "*"
 djangorestframework = "*"
 coreapi = "*"
 gunicorn = "*"
+django-filter = "*"
 
 
 [dev-packages]

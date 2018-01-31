@@ -1,6 +1,8 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from app_age.tests.data_agendamento import reg1, reg2, reg_invalid_date, reg_not_unique, reg_blank, reg_list,\
+from app_age.tests.data_agendamento import reg1, reg2, reg3,\
+    reg_invalid_date, reg_not_unique, reg_blank,\
+    reg_list, reg_list2, \
     reg_hora_inicial_maior_hora_final
 
 class AgendamentoAPI(APITestCase):
@@ -60,6 +62,30 @@ class AgendamentoAPI(APITestCase):
         for i, reg in enumerate(reg_list['out']):
             for item in reg:
                 self.assertEqual(response2.data[i][item], reg_list['out'][i][item])
+
+
+    def test_list_with_filter(self):
+        response_create1 = self.client.post('/agendamento/', data=reg1['in'])
+        response_create2 = self.client.post('/agendamento/', data=reg2['in'])
+        response_create3 = self.client.post('/agendamento/', data=reg3['in'])
+        response1 = self.client.get('/agendamento/?min_data=2019-01-31&max_data=2019-01-31')
+        response2 = self.client.get('/agendamento/?data=2019-02-01')
+        response3 = self.client.get('/agendamento/?paciente=Luis')
+
+        self.assertEqual(response1.status_code, status.HTTP_200_OK)
+        for i, reg in enumerate(reg_list['out']):
+            for item in reg:
+                self.assertEqual(response1.data[i][item], reg_list['out'][i][item])
+
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        for i, reg in enumerate(reg_list2['out']):
+            for item in reg:
+                self.assertEqual(response2.data[i][item], reg_list2['out'][i][item])
+
+        self.assertEqual(response3.status_code, status.HTTP_200_OK)
+        for i, reg in enumerate(reg_list2['out']):
+            for item in reg:
+                self.assertEqual(response3.data[i][item], reg_list2['out'][i][item])
 
 
     def test_detail_ok(self):

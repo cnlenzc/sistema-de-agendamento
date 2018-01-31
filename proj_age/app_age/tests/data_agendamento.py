@@ -40,6 +40,27 @@ reg2 = \
 }
 
 
+reg3 = \
+{
+    "in":
+    {
+        "data": "2019-02-01",
+        "hora_inicial": "9:15",
+        "hora_final": "9:45",
+        "paciente": "Luis",
+        "procedimento": "exame vista",
+    },
+    "out":
+    {
+        "data": "2019-02-01",
+        "hora_inicial": "09:15:00",
+        "hora_final": "09:45:00",
+        "paciente": "Luis",
+        "procedimento": "exame vista",
+    },
+}
+
+
 reg_invalid_date = \
 {
     "in":
@@ -127,5 +148,13 @@ reg_list = \
     [
         reg1['out'],
         reg2['out'],
+    ]
+}
+
+reg_list2 = \
+{
+    "out":
+    [
+        reg3['out'],
     ]
 }
