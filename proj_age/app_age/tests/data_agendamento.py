@@ -145,16 +145,38 @@ reg_hora_inicial_maior_hora_final = \
 reg_list = \
 {
     "out":
-    [
-        reg1['out'],
-        reg2['out'],
-    ]
+    {
+        "count": 2,
+        "next": None,
+        "previous": None,
+        "results": [
+            reg1['out'],
+            reg2['out'],
+        ]
+    }
 }
 
 reg_list2 = \
 {
     "out":
-    [
-        reg3['out'],
-    ]
+    {
+        "count": 1,
+        "next": None,
+        "previous": None,
+        "results": [
+            reg3['out'],
+        ]
+    }
+}
+
+reg_list_empty = \
+{
+    "out":
+    {
+        "count": 0,
+        "next": None,
+        "previous": None,
+        "results": [
+        ]
+    }
 }

@@ -1,15 +1,16 @@
 import requests
 from datetime import datetime, timedelta
 
-
 # incluir
-dia = datetime.today()
-for i in range(1, 101):
-    dia += timedelta(days=1)
+data_hora = datetime.today()
+for i in range(1, 1111):
+    hora_inicial = data_hora.strftime("%H:%M")
+    data_hora += timedelta(hours=1)
+    hora_final = data_hora.strftime("%H:%M")
     dados = {
-        "data": dia.strftime("%Y-%m-%d"),
-        "hora_inicial": "8:00",
-        "hora_final": "9:00",
+        "data": data_hora.strftime("%Y-%m-%d"),
+        "hora_inicial": hora_inicial,
+        "hora_final": hora_final,
         "paciente": "paciente %s" % i,
         "procedimento": "procedimento %s" % i,
     }
@@ -17,11 +18,3 @@ for i in range(1, 101):
     print(response.json())
 
 
-# listar
-response = requests.get("http://localhost:8000/agendamento/")
-print('Lista de registros')
-print('-' * 100)
-for registro in response.json():
-    print(registro)
-print('-' * 100)
-print('Total de %s registros' % len(response.json()))

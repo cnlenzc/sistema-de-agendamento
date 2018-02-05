@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from app_age.tests.data_agendamento import reg1, reg2, reg3,\
     reg_invalid_date, reg_not_unique, reg_blank,\
-    reg_list, reg_list2, \
+    reg_list, reg_list2, reg_list_empty, \
     reg_hora_inicial_maior_hora_final
 
 class AgendamentoAPI(APITestCase):
@@ -57,11 +57,14 @@ class AgendamentoAPI(APITestCase):
         response2 = self.client.get('/agendamento/')
 
         self.assertEqual(response1.status_code, status.HTTP_200_OK)
-        self.assertEqual(response1.data, [])
+        self.assertEqual(response1.data, reg_list_empty['out'])
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        for i, reg in enumerate(reg_list['out']):
+        self.assertEqual(response2.data['count'], reg_list['out']['count'])
+        self.assertEqual(response2.data['next'], reg_list['out']['next'])
+        self.assertEqual(response2.data['previous'], reg_list['out']['previous'])
+        for i, reg in enumerate(reg_list['out']['results']):
             for item in reg:
-                self.assertEqual(response2.data[i][item], reg_list['out'][i][item])
+                self.assertEqual(response2.data['results'][i][item], reg_list['out']['results'][i][item])
 
 
     def test_list_with_filter(self):
@@ -73,19 +76,28 @@ class AgendamentoAPI(APITestCase):
         response3 = self.client.get('/agendamento/?paciente=Luis')
 
         self.assertEqual(response1.status_code, status.HTTP_200_OK)
-        for i, reg in enumerate(reg_list['out']):
+        self.assertEqual(response1.data['count'], reg_list['out']['count'])
+        self.assertEqual(response1.data['next'], reg_list['out']['next'])
+        self.assertEqual(response1.data['previous'], reg_list['out']['previous'])
+        for i, reg in enumerate(reg_list['out']['results']):
             for item in reg:
-                self.assertEqual(response1.data[i][item], reg_list['out'][i][item])
+                self.assertEqual(response1.data['results'][i][item], reg_list['out']['results'][i][item])
 
         self.assertEqual(response2.status_code, status.HTTP_200_OK)
-        for i, reg in enumerate(reg_list2['out']):
+        self.assertEqual(response2.data['count'], reg_list2['out']['count'])
+        self.assertEqual(response2.data['next'], reg_list2['out']['next'])
+        self.assertEqual(response2.data['previous'], reg_list2['out']['previous'])
+        for i, reg in enumerate(reg_list2['out']['results']):
             for item in reg:
-                self.assertEqual(response2.data[i][item], reg_list2['out'][i][item])
+                self.assertEqual(response2.data['results'][i][item], reg_list2['out']['results'][i][item])
 
         self.assertEqual(response3.status_code, status.HTTP_200_OK)
-        for i, reg in enumerate(reg_list2['out']):
+        self.assertEqual(response3.data['count'], reg_list2['out']['count'])
+        self.assertEqual(response3.data['next'], reg_list2['out']['next'])
+        self.assertEqual(response3.data['previous'], reg_list2['out']['previous'])
+        for i, reg in enumerate(reg_list2['out']['results']):
             for item in reg:
-                self.assertEqual(response3.data[i][item], reg_list2['out'][i][item])
+                self.assertEqual(response3.data['results'][i][item], reg_list2['out']['results'][i][item])
 
 
     def test_detail_ok(self):

@@ -17,10 +17,6 @@ class AgendamentoFilter(FilterSet):
     class Meta:
         model = Agendamento
         fields = ['data', 'paciente']
-        # fields = {
-        #     'data': ['lte', 'gte'],
-        #     'release_date': ['exact', 'year__gt'],
-        # }
 
 
 class AgendamentoViewSet(viewsets.ModelViewSet):
