@@ -3,7 +3,6 @@ from app_age.models import Agendamento
 from app_age.serializers import AgendamentoSerializer
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, DateFilter
-# from django_filters import rest_framework as filters
 
 
 def index(request):

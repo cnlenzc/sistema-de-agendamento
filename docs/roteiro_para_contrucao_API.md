@@ -4,7 +4,7 @@
 ```
 $ mkdir sistema-de-agendamento
 $ cd sistema-de-agendamento
-$ pipenv install
+$ pipenv install --dev
 $ pipenv shell
 ```
 
@@ -12,6 +12,14 @@ $ pipenv shell
 ```
 pipenv install django
 pipenv install djangorestframework
+pipenv install django-filter
+pipenv install psycopg2
+pipenv install prettyconf
+pipenv install whitenoise
+pipenv install dj-database-url
+pipenv install coreapi
+pipenv install gunicorn
+pipenv install python-dotenv --dev
 ```
 
 
@@ -122,10 +130,21 @@ class Agendamento(models.Model):
         unique_together = ('data', 'hora_inicial')
         ordering = ('data', 'hora_inicial')
 
+    def __str__(self):
+        return '%s %s paciente: %s' % (self.data, self.hora_inicial, self.paciente)
+
 ```
 
 
 #### Criação do Banco Relacional
+##### Banco no Postgres criado pelo pgAdmin
+
+```
+database name: db_age
+user: u_age
+password: pwd123
+```
+##### Criação dos objetos SQL (tabelas, etc)
 ```
 python manage.py makemigrations
 python manage.py migrate
@@ -186,6 +205,26 @@ urlpatterns = [
 #### Criação da view
 Arquivo app_age/views.py
 ```
+from rest_framework import viewsets, permissions
+from app_age.models import Agendamento
+from app_age.serializers import AgendamentoSerializer
+from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, DateFilter
+
+
+def index(request):
+    return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
+
+
+class AgendamentoFilter(FilterSet):
+    min_data = DateFilter(name="data", lookup_expr='gte')
+    max_data = DateFilter(name="data", lookup_expr='lte')
+
+    class Meta:
+        model = Agendamento
+        fields = ['data', 'paciente']
+
+
 class AgendamentoViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -213,6 +252,8 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
     queryset = Agendamento.objects.all()
     serializer_class = AgendamentoSerializer
     permission_classes = (permissions.AllowAny,)
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = AgendamentoFilter
 ```
 
 #### Criação do serializer
@@ -221,10 +262,20 @@ Arquivo app_age/serializers.py
 from rest_framework import serializers
 from app_age.models import Agendamento
 
+
 class AgendamentoSerializer(serializers.ModelSerializer):
-   class Meta:
+
+    class Meta:
         model = Agendamento
         fields = ('__all__')
+
+    def validate(self, attrs):
+        """
+        Check that the start is before the stop.
+        """
+        if attrs['hora_inicial'] >= attrs['hora_final']:
+            raise serializers.ValidationError("O horário final da consulta deve ser depois do inicial")
+        return attrs
 ```
 
 #### Criação do arquivo de variáveis ambiente
@@ -250,6 +301,13 @@ if os.environ.get('DEBUG') is None:
         dotenv.load_dotenv(DOTENV_FILE)
     else:
         raise OSError('File .env does not exists. Rename the file .env_dev to .env')
+
+...
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 25
+}
 
 ...
 
@@ -291,43 +349,43 @@ $ git push heroku master
     -----> Python app detected
     -----> Launching... done, v7
 $ heroku run python proj_age/manage.py migrate
+$ heroku run python proj_age/app_age/tests/create_large_data.py
 $ heroku config:set DEBUG=False
 $ heroku config:set SECRET_KEY=')z*j%sx=d3zq9h_m-ovw-hq!p2()yzg!ydft_+smpw=#n(l0h*'
 ```
 
 ## Comandos do heroku
-To run your application locally
+##### To run your application locally
 ```
 $ heroku local web
 ```
 
-To view your application remote
+##### To view your application remote
 ```
 $ heroku open
 ```
 
-View logs
+##### View logs
 ```
 $ heroku logs --tail
 ```
 
-View info running
+##### View info running
 ```
 $ heroku ps
 ```
-Processing static files
+##### Processing static files
 ```
 $ python manage.py collectstatic
 ```
 
-shell remote
+##### shell remote
 ```
 $ heroku run bash
 $ heroku run python
 $ heroku run python manage.py shell
 $ heroku run python manage.py migrate
 $ heroku run python proj_age/manage.py migrate
-
 ```
 
 
