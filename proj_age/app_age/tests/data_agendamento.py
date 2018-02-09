@@ -1,16 +1,20 @@
+from datetime import datetime, timedelta
+
+date1 = datetime.today()
+date2 = datetime.today() + timedelta(days=1)
 
 reg1 = \
 {
     "in":
     {
-        "data": "2019-01-31",
+        "data": date1.strftime("%Y-%m-%d"),
         "hora_inicial": "8:00",
         "hora_final": "9:00",
         "paciente": "Felipe",
     },
     "out":
     {
-        "data": "2019-01-31",
+        "data": date1.strftime("%Y-%m-%d"),
         "hora_inicial": "08:00:00",
         "hora_final": "09:00:00",
         "paciente": "Felipe",
@@ -23,7 +27,7 @@ reg2 = \
 {
     "in":
     {
-        "data": "2019-01-31",
+        "data": date1.strftime("%Y-%m-%d"),
         "hora_inicial": "9:15",
         "hora_final": "9:45",
         "paciente": "Fernando",
@@ -31,7 +35,7 @@ reg2 = \
     },
     "out":
     {
-        "data": "2019-01-31",
+        "data": date1.strftime("%Y-%m-%d"),
         "hora_inicial": "09:15:00",
         "hora_final": "09:45:00",
         "paciente": "Fernando",
@@ -44,7 +48,7 @@ reg3 = \
 {
     "in":
     {
-        "data": "2019-02-01",
+        "data": date2.strftime("%Y-%m-%d"),
         "hora_inicial": "9:15",
         "hora_final": "9:45",
         "paciente": "Luis",
@@ -52,7 +56,7 @@ reg3 = \
     },
     "out":
     {
-        "data": "2019-02-01",
+        "data": date2.strftime("%Y-%m-%d"),
         "hora_inicial": "09:15:00",
         "hora_final": "09:45:00",
         "paciente": "Luis",

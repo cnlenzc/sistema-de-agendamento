@@ -1,9 +1,12 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from app_age.tests.data_agendamento import reg1, reg2, reg3,\
+from app_age.tests.data_agendamento import \
+    reg1, reg2, reg3, date1, date2, \
     reg_invalid_date, reg_not_unique, reg_blank,\
     reg_list, reg_list2, reg_list_empty, \
     reg_hora_inicial_maior_hora_final
+
+
 
 class AgendamentoAPI(APITestCase):
 
@@ -71,8 +74,9 @@ class AgendamentoAPI(APITestCase):
         response_create1 = self.client.post('/agendamento/', data=reg1['in'])
         response_create2 = self.client.post('/agendamento/', data=reg2['in'])
         response_create3 = self.client.post('/agendamento/', data=reg3['in'])
-        response1 = self.client.get('/agendamento/?min_data=2019-01-31&max_data=2019-01-31')
-        response2 = self.client.get('/agendamento/?data=2019-02-01')
+        response1 = self.client.get('/agendamento/?min_data=%s&max_data=%s'
+                                    % (date1.strftime("%Y-%m-%d"), date1.strftime("%Y-%m-%d")))
+        response2 = self.client.get('/agendamento/?data=%s' % date2.strftime("%Y-%m-%d"))
         response3 = self.client.get('/agendamento/?paciente=Luis')
 
         self.assertEqual(response1.status_code, status.HTTP_200_OK)
