@@ -26,3 +26,4 @@ django-filter = "*"
 [dev-packages]
 
 python-dotenv = "*"
+"flake8" = "*"

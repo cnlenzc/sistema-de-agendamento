@@ -16,11 +16,16 @@ import dj_database_url
 if os.environ.get('DEBUG') is None:
     print('Loading .env File')
     import dotenv
-    DOTENV_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env')
+    DOTENV_FILE = \
+        os.path.join(
+            os.path.dirname(
+                os.path.dirname(
+                    os.path.dirname(__file__))), '.env')
     if os.path.isfile(DOTENV_FILE):
         dotenv.load_dotenv(DOTENV_FILE)
     else:
-        raise OSError('File .env does not exists. Rename the file .env_dev to .env')
+        raise OSError(
+            'File .env does not exists. Rename the file .env_dev to .env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     # Disable Django's own staticfiles handling in favour of WhiteNoise, for
     # greater consistency between gunicorn and `./manage.py runserver`. See:
-    # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
+    # http://whitenoise.evans.io/en/stable/django.html#
+    #     using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
@@ -64,7 +70,8 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 25
 }
 
@@ -102,16 +109,20 @@ DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'NumericPasswordValidator',
     },
 ]
 

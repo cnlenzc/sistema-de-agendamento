@@ -1,9 +1,11 @@
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions
 from app_age.models import Agendamento
 from app_age.serializers import AgendamentoSerializer
 from django.http import HttpResponse
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet, DateFilter
+from django_filters.rest_framework\
+    import DjangoFilterBackend, FilterSet, DateFilter
 from datetime import datetime, timedelta
+
 
 def index(request):
     return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
@@ -60,6 +62,8 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
                 if not (param_min_data or param_max_data):
                     min_data = datetime.today()
                     max_data = min_data + timedelta(days=7)
-                    queryset = queryset.filter(data__gte=min_data, data__lt=max_data)
+                    queryset = queryset.filter(
+                        data__gte=min_data,
+                        data__lt=max_data)
 
         return queryset

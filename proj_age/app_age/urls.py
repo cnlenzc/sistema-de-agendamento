@@ -10,6 +10,7 @@ router.register(r'agendamento', views.AgendamentoViewSet)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^docs/', include_docs_urls(title='API REST para o sistema de agendamento')),
+    url(r'^docs/', include_docs_urls(
+        title='API REST para o sistema de agendamento')),
     url(r'^', include(router.urls)),
 ]

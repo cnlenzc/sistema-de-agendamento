@@ -15,7 +15,7 @@ for i in range(1, 1111):
         "procedimento": "procedimento %s" % i,
     }
     response = requests.post("http://localhost:8000/agendamento/", data=dados)
-    # response = requests.post("https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/", data=dados)
+    # response = requests.post(
+    #     "https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/",
+    #     data=dados)
     print(response.json())
-
-

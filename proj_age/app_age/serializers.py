@@ -13,7 +13,6 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         Check that the start is before the stop.
         """
         if attrs['hora_inicial'] >= attrs['hora_final']:
-            raise serializers.ValidationError("O horário final da consulta deve ser depois do inicial")
+            raise serializers.ValidationError(
+                "O horário final da consulta deve ser depois do inicial")
         return attrs
-
-
