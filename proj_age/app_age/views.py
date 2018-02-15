@@ -1,12 +1,13 @@
+from datetime import datetime, timedelta
 from rest_framework import viewsets, permissions
-from app_age.models import Agendamento
-from app_age.serializers import AgendamentoSerializer
 from django.http import HttpResponse
 from django_filters.rest_framework\
     import DjangoFilterBackend, FilterSet, DateFilter
-from datetime import datetime, timedelta
+from app_age.models import Agendamento
+from app_age.serializers import AgendamentoSerializer
 
 
+# pylint: disable=unused-argument
 def index(request):
     return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
 

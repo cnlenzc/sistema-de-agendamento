@@ -1,0 +1,5 @@
+[flake8]
+exclude =
+    # No need to check automatic code django migration
+    ./proj_age/app_age/migrations/
+max-complexity = 10

@@ -21,9 +21,12 @@ djangorestframework = "*"
 coreapi = "*"
 gunicorn = "*"
 django-filter = "*"
+"psycopg2-binary" = "*"
 
 
 [dev-packages]
 
 python-dotenv = "*"
 "flake8" = "*"
+pylint = "*"
+pylint-django = "*"

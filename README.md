@@ -106,15 +106,20 @@ https://sistema-de-agendamento-lenz.herokuapp.com/agendamento/
 ### Coding style tests
 
 Using flake8 to check the coding style
-
 ```
-$ flake8 . --exclude ./proj_age/app_age/migrations/
+$ flake8 . --count
 ```
 
 The flake 8 checks:
 	source files for errors (pyflakes).
 	style conventions in PEP 8 (pycodestyle).
 	code complexity (mccabe).
+
+Using pylint to check the coding style
+```
+$ pylint --load-plugins pylint_django proj_age/app_age
+```
+
 
 ## Deployment by heroku
 

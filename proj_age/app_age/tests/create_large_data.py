@@ -1,5 +1,5 @@
-import requests
 from datetime import datetime, timedelta
+import requests
 
 # incluir
 data_hora = datetime.today()

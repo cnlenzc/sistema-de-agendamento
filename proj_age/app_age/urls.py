@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
-from app_age import views
 from rest_framework.routers import DefaultRouter
 from rest_framework.documentation import include_docs_urls
+from app_age import views
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
