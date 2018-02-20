@@ -9,7 +9,7 @@ from app_age.serializers import AgendamentoSerializer
 
 # pylint: disable=unused-argument
 def index(request):
-    return HttpResponse("Olá Pytonistas! Bem vindo ao Sistema de Agendamento!")
+    return HttpResponse("Olá! Bem vindo ao Sistema de Agendamento!")
 
 
 class AgendamentoFilter(FilterSet):
@@ -25,25 +25,18 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
     """
     This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
-
     list:
-    Retorna a lista de agendamentos.
-
+        Retorna a lista de agendamentos.
     create:
-    Cria um novo agendamento.
-
+        Cria um novo agendamento.
     retrieve:
-    Consulta um agendamento específico.
-
+        Consulta um agendamento específico.
     update:
-    Altera todas as informações de um agendamento.
-
+        Altera todas as informações de um agendamento.
     partial_update:
-    Altera um campo de um agendamento.
-
+        Altera um campo de um agendamento.
     destroy:
-    Remove um agendamento.
-
+        Remove um agendamento.
     """
     queryset = Agendamento.objects.all()
     serializer_class = AgendamentoSerializer

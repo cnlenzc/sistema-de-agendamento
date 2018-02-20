@@ -3,7 +3,7 @@ from django.db import models
 
 class Agendamento(models.Model):
     data = models.DateField(
-        help_text='Data do agendamento da consulta/exame')
+        help_text='Data do agendamento do procedimento')
     hora_inicial = models.TimeField(
         help_text='Hora do início')
     hora_final = models.TimeField(
